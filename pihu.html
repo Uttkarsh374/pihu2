@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Love Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(to top right, #ff9a9e, #fad0c4);
+      color: white;
+    }
+
+    .heart {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background: red;
+      transform: rotate(45deg);
+      animation: floatUp 5s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(0.5) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgba(255, 192, 203, 0.85);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 999;
+      color: white;
+    }
+
+    .modal h1 {
+      font-size: 2.5rem;
+      color: #fff;
+      text-shadow: 1px 1px #f00;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .modal-buttons {
+      margin-top: 20px;
+    }
+
+    .modal button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .yes-btn {
+      background-color: #ff69b4;
+      color: white;
+    }
+
+    .no-btn {
+      background-color: #ddd;
+      position: relative;
+      color: black;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 100px;
+      font-size: 2rem;
+      color: white;
+      display: none;
+      max-width: 90vw;
+      user-select: none;
+    }
+
+    .play-prompt {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      z-index: 1000;
+      border: 2px solid #ff69b4;
+      animation: pulse 2s infinite;
+      user-select: none;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Love Contract modal content overrides */
+    #contractModal > div {
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      color: black;
+      text-align: left;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 1.1rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      user-select: text;
+    }
+
+    #contractModal h1 {
+      color: #ff69b4;
+      text-shadow: none;
+      margin-bottom: 10px;
+    }
+
+    #contractModal h2 {
+      color: #ff69b4;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Typing animation container style */
+    .typing-text {
+      white-space: pre-wrap;
+      border-right: 3px solid #ff69b4;
+      animation: blinkCaret 0.8s step-end infinite;
+      overflow-wrap: break-word;
+    }
+
+    @keyframes blinkCaret {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #ff69b4; }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop hidden>
+  <source src="pretty_little_baby.mp3" type="audio/mp3">
+  Your browser does not support the audio element.
+</audio>
+
+<div class="play-prompt" id="playPrompt" onclick="enableMusic()">🎵 Click to enable music</div>
+
+<!-- Initial question modal -->
+<div class="modal" id="modal">
+  <h1 id="questionText"></h1>
+  <div class="modal-buttons">
+    <button class="yes-btn" id="yesBtn">Yes 💖</button>
+    <button class="no-btn" id="noBtn">No 😢</button>
+  </div>
+</div>
+
+<!-- Love Contract modal (hidden initially) -->
+<div class="modal hidden" id="contractModal">
+  <h1>LOVE CONTRACT 💘</h1>
+  <div>
+    <p>
+      This Love Contract is hereby entered between two adorable parties: <strong>You</strong> (the Cutie)
+      and <strong>Me</strong> (the Simp). 💁‍♂️
+    </p>
+    <ol>
+      <li>Daily good morning and good night texts are mandatory ☀️🌙</li>
+      <li>Unlimited hugs and forehead kisses must be supplied on demand 🤗💋</li>
+      <li>You Agree to watch all 10000+ reels I send you everyday </li>
+      <li>Fights shall end the same day. Time-outs may include snacks 🍕</li>
+      <li>Netflix, cuddles, and shared hoodies are a legal requirement 🎬🧥</li>
+      <li>You must always be my Kuttu, even in public 🐶❤️</li>
+      <li>You agree to subscribe to unlimited hot seamyyy segss 😋</li>
+      <li>Bitch you move in with me and never look back!</li>
+      <li>You consent to all the PDA's I'm about to do to you in this lifee 💋</li>
+    </ol>
+    <p>
+      By clicking “Yes 💖”, you agree to be my forever hooman, my partner-in-cringe, and the love of my life 🥰
+    </p>
+    <h2 style="text-align: center;">Do you accept? 📝</h2>
+    <div class="modal-buttons" style="text-align: center;">
+      <button class="yes-btn" id="finalYesBtn">Yes 💖</button>
+      <button class="no-btn" id="noBtnFinal">No 😢</button>
+    </div>
+  </div>
+</div>
+
+<!-- Final content shown after contract acceptance -->
+<div class="content" id="mainContent">
+  <h1></h1>
+</div>
+
+<script>
+  const questions = [
+    "Do you love me? 🥺 \n(No bolke to dekh!😠)",
+    "Will you go on a date with me? 💌",
+    "Do you have a Sexy ass? 🍑",
+    "Are you my Kuttu (Pihu)? 🐶💖"
+  ];
+
+  let currentQuestion = 0;
+  let musicEnabled = false;
+
+  const questionText = document.getElementById("questionText");
+  const modal = document.getElementById("modal");
+  const mainContent = document.getElementById("mainContent");
+  const bgMusic = document.getElementById("bgMusic");
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const playPrompt = document.getElementById("playPrompt");
+
+  const contractModal = document.getElementById("contractModal");
+  const finalYesBtn = document.getElementById("finalYesBtn");
+  const noBtnFinal = document.getElementById("noBtnFinal");
+  const mainContentH1 = mainContent.querySelector("h1");
+
+  // Typing animation helper
+  function typeText(element, text, delay = 30) {
+    element.textContent = '';
+    let i = 0;
+    return new Promise(resolve => {
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, delay);
+        } else {
+          resolve();
+        }
+      }
+      type();
+    });
+  }
+
+  // Initially set first question with typing animation
+  window.addEventListener('load', () => {
+    typeText(questionText, questions[0]);
+
+    // Try autoplay music on load
+    bgMusic.play().then(() => {
+      musicEnabled = true;
+      playPrompt.style.display = 'none';
+    }).catch(() => {
+      console.log('Autoplay blocked, showing music prompt');
+    });
+  });
+
+  // Enable music from user click prompt
+  function enableMusic() {
+    bgMusic.play().then(() => {
+      musicEnabled = true;
+      playPrompt.style.display = 'none';
+    }).catch(error => {
+      console.log('Error playing music:', error);
+    });
+  }
+
+  // Move no button randomly on hover for initial modal
+  noBtn.addEventListener("mouseover", () => {
+    const i = Math.floor(Math.random() * window.innerHeight * 0.8);
+    const j = Math.floor(Math.random() * window.innerWidth * 0.8);
+    noBtn.style.position = "absolute";
+    noBtn.style.top = i + "px";
+    noBtn.style.left = j + "px";
+  });
+
+  // Move no button randomly on hover for contract modal
+  noBtnFinal.addEventListener("mouseover", () => {
+    const i = Math.floor(Math.random() * window.innerHeight * 0.8);
+    const j = Math.floor(Math.random() * window.innerWidth * 0.8);
+    noBtnFinal.style.position = "absolute";
+    noBtnFinal.style.top = i + "px";
+    noBtnFinal.style.left = j + "px";
+  });
+
+  // Next question or show contract modal
+  yesBtn.addEventListener("click", async () => {
+    // Ensure music plays on interaction
+    if (!musicEnabled) {
+      try {
+        await bgMusic.play();
+        musicEnabled = true;
+        playPrompt.style.display = 'none';
+      } catch (error) {
+        console.log('Error playing music:', error);
+      }
+    }
+
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      await typeText(questionText, questions[currentQuestion]);
+    } else {
+      // Hide initial modal, show contract modal with typing animation for header
+      modal.classList.add("hidden");
+      contractModal.classList.remove("hidden");
+      // We can add typing effect for contractModal h1 if you want
+      const contractHeader = contractModal.querySelector('h1');
+      typeText(contractHeader, "LOVE CONTRACT 💘");
+    }
+  });
+
+  // Function when user accepts contract
+  finalYesBtn.addEventListener("click", async () => {
+    contractModal.classList.add("hidden");
+    mainContent.style.display = "block";
+
+    // Typing the final message
+    const finalMessage = "So it's fixed then. \nSunday: 25/05\nTime: 07:30\nSee you there! 😘";
+    await typeText(mainContentH1, finalMessage);
+  });
+
+  // No button on initial modal just runs away
+  // You can add other behaviors if you want.
+
+  // No button on contract modal also runs away
+</script>
+
+<script>
+  // Create hearts continuously
+  function createHearts() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }
+  setInterval(createHearts, 300);
+</script>
+
+</body>
+</html>
